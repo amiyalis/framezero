@@ -1,0 +1,197 @@
+<!doctype html>
+<!-- Copyright 2026 Matheus Patricio Pessoa Santana — framezero (MIT)
+     The promo video for framezero itself, made with framezero (12.6 s, same timeline as templates/starter.html).
+     HOOK 0–2.4 → 1 WRITE seek(t) 2.4–5.0 → 2 RENDER 4K60 5.0–7.6 → 3 MUSIC FROM CODE 7.6–10.2 → CTA 10.2–12.6 → loop -->
+<html lang="en"><head><meta charset="utf-8">
+<!--BASE-->
+<style>
+  html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#07041A;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+  .scene{position:absolute;inset:0;opacity:0;overflow:hidden}
+  .abs{position:absolute;will-change:transform,opacity}
+  .big{left:0;right:0;text-align:center;font-weight:900;letter-spacing:-.055em;line-height:.9;text-transform:uppercase;white-space:nowrap}
+  .bg-dark{background:radial-gradient(120% 70% at 50% 32%,#3A23B8 0%,#1A0F5C 45%,#07041A 100%)}
+  .bg-violet{background:radial-gradient(90% 60% at 50% 38%,#9C85FF 0%,#6A4BFF 50%,#3A1FC2 100%)}
+  .bg-green{background:radial-gradient(90% 60% at 50% 38%,#1BE39C 0%,#00A66E 55%,#00663F 100%)}
+  .bg-coral{background:radial-gradient(90% 60% at 50% 38%,#FF8A66 0%,#F0442E 50%,#B01E1E 100%)}
+  .dots{position:absolute;inset:-200px;background-image:radial-gradient(rgba(255,255,255,.08) 2px,transparent 2.5px);background-size:46px 46px}
+  code,.mono{font-family:ui-monospace,"DejaVu Sans Mono",Menlo,Consolas,monospace}
+
+  /* editor card */
+  .ed{position:absolute;left:90px;width:900px;border-radius:36px;background:#0D0A24;box-shadow:0 60px 120px -40px rgba(0,0,0,.7),inset 0 0 0 2px rgba(255,255,255,.1);overflow:hidden}
+  .ed .bar{height:70px;display:flex;align-items:center;gap:14px;padding:0 30px;background:rgba(255,255,255,.05)}
+  .ed .bar i{width:20px;height:20px;border-radius:10px;display:block}
+  .ed .bar span{margin-left:16px;color:rgba(255,255,255,.6);font-size:26px;font-weight:700}
+  .ed pre{margin:0;padding:30px 36px 36px;font-size:34px;line-height:1.55;color:#E9E6FF;white-space:pre}
+  .c{color:#8A86B0}.k{color:#FF8A66}.s{color:#9CF2C8}.f{color:#FFC233}
+  .caret{display:inline-block;width:4px;height:38px;background:#FFC233;vertical-align:-6px}
+
+  /* HOOK */
+  #hPov{top:290px;font-size:120px;color:#FFC233}
+  #hA{top:425px;font-size:68px;color:#fff;letter-spacing:-.04em}
+  #hB{top:510px;font-size:120px;color:#fff}
+  #hC{top:620px;font-size:300px;color:#FFC233}
+  #hD{left:0;right:0;top:930px;display:flex;justify-content:center}
+  #hD span{padding:20px 44px;border-radius:60px;background:#FF5A47;color:#fff;font-size:54px;font-weight:900;letter-spacing:-.03em;text-transform:uppercase}
+  #hEd{top:1100px;transform-origin:50% 0}
+
+  /* FEATURES */
+  .fbg{position:absolute;inset:0;opacity:0}
+  #bars{position:absolute;left:80px;right:80px;top:210px;display:flex;gap:12px;z-index:6}
+  #bars b{flex:1;height:9px;border-radius:5px;background:rgba(255,255,255,.3);overflow:hidden;position:relative}
+  #bars b i{position:absolute;left:0;top:0;bottom:0;width:0;background:#fff}
+  .ftitle{left:80px;top:250px;z-index:6;opacity:0}
+  .ftitle .num{display:inline-flex;align-items:baseline;padding:6px 18px;border-radius:18px;background:#FFC233;color:#17142B;font-size:58px;font-weight:900}
+  .ftitle .num small{font-size:30px;opacity:.6}
+  .ftitle .t{margin-top:14px;font-size:112px;font-weight:900;letter-spacing:-.05em;line-height:.92;color:#fff;text-transform:uppercase;white-space:nowrap}
+  .ftitle .s{margin-top:12px;font-size:42px;font-weight:700;color:rgba(255,255,255,.92);letter-spacing:-.02em}
+  .panel{position:absolute;left:0;right:0;top:640px;bottom:0;z-index:5;opacity:0}
+  .lab{position:absolute;z-index:7;white-space:nowrap;padding:16px 26px;border-radius:26px;background:#17142B;color:#fff;font-size:44px;font-weight:700;letter-spacing:-.02em;box-shadow:0 20px 40px -16px rgba(0,0,0,.5);transform-origin:50% 50%;opacity:0}
+  .lab b{color:#FFC233}
+  /* render panel */
+  #film{position:absolute;left:0;top:90px;height:620px;display:flex;gap:30px}
+  #film .fr{width:349px;height:620px;border-radius:34px;background:#0A0B10;padding:10px;box-shadow:0 40px 80px -30px rgba(0,0,0,.6)}
+  #film .fr img{width:100%;height:100%;object-fit:cover;border-radius:26px;display:block}
+  #prog{position:absolute;left:90px;right:90px;top:790px;height:30px;border-radius:15px;background:rgba(255,255,255,.25);overflow:hidden}
+  #prog i{position:absolute;left:0;top:0;bottom:0;width:0;background:#fff;border-radius:15px}
+  #cnt{position:absolute;left:90px;right:90px;top:845px;display:flex;justify-content:space-between;color:#fff;font-size:44px;font-weight:800}
+  #res{position:absolute;left:0;right:0;top:950px;text-align:center}
+  #res span{display:inline-block;padding:18px 40px;border-radius:30px;background:#fff;color:#00663F;font-size:64px;font-weight:900;letter-spacing:-.03em}
+  /* music panel */
+  #wave{position:absolute;left:90px;right:90px;top:120px;height:420px;display:flex;align-items:center;justify-content:space-between}
+  #wave b{width:22px;border-radius:11px;background:#fff;display:block}
+  .chip{position:absolute;padding:20px 32px;border-radius:30px;background:rgba(255,255,255,.95);color:#B01E1E;font-size:48px;font-weight:900;letter-spacing:-.03em;opacity:0}
+
+  /* CTA */
+  #cA{top:380px;font-size:150px;color:#fff}
+  #cB{top:530px;font-size:150px;color:#FFC233}
+  #cMark{left:0;right:0;top:760px;text-align:center;font-size:150px;font-weight:900;letter-spacing:-.06em;color:#fff}
+  #cMark b{color:#FFC233}
+  #cPill{left:0;right:0;top:980px;display:flex;justify-content:center}
+  #cPill span{display:inline-flex;gap:16px;align-items:center;white-space:nowrap;padding:22px 36px;border-radius:60px;background:#fff;color:#17142B;font-size:33px;font-weight:800;letter-spacing:-.02em;box-shadow:0 30px 60px -24px rgba(0,0,0,.6)}
+  #cFollow{left:0;right:0;top:1150px;text-align:center;font-size:46px;font-weight:700;color:rgba(255,255,255,.92);letter-spacing:-.02em}
+  #cStar{left:0;right:0;top:1250px;text-align:center;font-size:60px;font-weight:900;color:#FFC233}
+</style></head><body>
+
+<div class="scene bg-dark" id="sHook"><div class="dots" id="d1"></div>
+  <div class="abs big" id="hPov">POV:</div>
+  <div class="abs big" id="hA">your app's promo video</div>
+  <div class="abs big" id="hB">is just</div>
+  <div class="abs big" id="hC">HTML</div>
+  <div class="abs" id="hD"><span>rendered in 4K60</span></div>
+  <div class="ed" id="hEd"><div class="bar"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i><span>promo.html</span></div>
+<pre><span class="k">function</span> <span class="f">seek</span>(t) {
+  <span class="f">slam</span>(hook, t, <span class="f">0</span>);
+  <span class="f">zoom</span>(phone, t, <span class="f">2.4</span>);
+}</pre></div>
+</div>
+
+<div class="scene" id="sFeat">
+  <div class="fbg bg-violet" id="fb0"><div class="dots"></div></div>
+  <div class="fbg bg-green" id="fb1"><div class="dots"></div></div>
+  <div class="fbg bg-coral" id="fb2"><div class="dots"></div></div>
+  <div id="bars"><b><i></i></b><b><i></i></b><b><i></i></b></div>
+  <div id="titles"></div>
+  <!-- 1 code -->
+  <div class="panel" id="p0"><div class="ed" id="ed1" style="top:60px"><div class="bar"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i><span>scene.html</span></div><pre id="code"></pre></div>
+    <div class="lab" id="l0">a <b>pure function</b> of time</div></div>
+  <!-- 2 render -->
+  <div class="panel" id="p1"><div id="film"></div><div id="prog"><i></i></div>
+    <div id="cnt" class="mono"><span id="cn">frame 0</span><span>/ 2340</span></div><div id="res"><span>2160 × 3840 · 60 fps</span></div></div>
+  <!-- 3 music -->
+  <div class="panel" id="p2"><div id="wave"></div>
+    <div class="chip" id="m0" style="left:110px;top:640px">lo-fi beat</div><div class="chip" id="m1" style="left:520px;top:640px">whoosh</div>
+    <div class="chip" id="m2" style="left:200px;top:800px">pop</div><div class="chip" id="m3" style="left:440px;top:800px">coin +XP</div>
+    <div class="lab" id="l2">zero <b>copyright</b></div></div>
+</div>
+
+<div class="scene bg-dark" id="sCTA"><div class="dots" id="d2"></div>
+  <div class="abs big" id="cA">free &amp;</div>
+  <div class="abs big" id="cB">open source</div>
+  <div class="abs" id="cMark">frame<b>zero</b></div>
+  <div class="abs" id="cPill"><span>github.com/matheusvibecoder-vibecodas/framezero</span></div>
+  <div class="abs" id="cFollow">works with your AI coding agent</div>
+  <div class="abs" id="cStar">★ star it on GitHub</div>
+</div>
+
+<script>
+const DURATION = 12.6, LOOP = 12.2;
+const FEATS = [{ S: 2.4, E: 5.0, title: 'write seek(t)', sub: 'one HTML file per video' },
+               { S: 5.0, E: 7.6, title: 'render 4K60', sub: 'Playwright + ffmpeg, no GPU' },
+               { S: 7.6, E: 10.2, title: 'music from code', sub: 'lo-fi + effects, synced' }];
+const CODE = [
+  ['<span class="k">const</span> DURATION = <span class="f">12.6</span>;', 0.25],
+  ['<span class="k">function</span> <span class="f">seek</span>(t) {', 0.55],
+  ['  <span class="c">// same t, same picture</span>', 0.85],
+  ['  <span class="f">slam</span>($(<span class="s">\'#hook\'</span>), t, <span class="f">0</span>);', 1.15],
+  ['  <span class="f">rise</span>($(<span class="s">\'#sub\'</span>), t, <span class="f">.4</span>);', 1.45],
+  ['  cam.<span class="f">zoom</span>(t, <span class="f">2.4</span>, <span class="f">1.5</span>);', 1.75],
+  ['}', 2.0]];
+
+/* setup */
+$('#titles').innerHTML = FEATS.map((f, i) => `<div class="abs ftitle" id="ft${i}"><div class="num">${i + 1}<small>/3</small></div><div class="t">${f.title}</div><div class="s">${f.sub}</div></div>`).join('');
+FEATS.forEach((f, i) => { const t = $(`#ft${i} .t`), w = t.getBoundingClientRect().width; if (w > 920) t.style.fontSize = (112 * 920 / w) + 'px'; });
+$('#film').innerHTML = ['estuda-tour-hook', 'starter', 'estuda-tour-challenge', 'estuda-tour-hook', 'starter', 'estuda-tour-challenge']
+  .map(n => `<div class="fr"><img src="../../site/img/${n}.png"></div>`).join('');
+$('#wave').innerHTML = Array.from({ length: 30 }, () => '<b></b>').join('');
+
+function hookPose(t) {
+  pose($('#hPov'), { s: pulse(t, 0.5, .12), r: -3 }); pose($('#hA'), {}); pose($('#hB'), {});
+  pose($('#hC'), { s: pulse(t, 1.0, .14, .32), r: -2 });
+  pose($('#hD'), { s: pulse(t, 1.5, .12) });
+  const bump = (a, d = .3) => Math.sin(prog(t, a, a + d) * Math.PI);
+  $('#hEd').style.transform = `translateY(${-(40 * bump(.5) + 60 * bump(1.0, .34) + 40 * bump(1.5)) - 40 * E.inOut(prog(t, 0, 2))}px) rotate(${-3 + 2 * Math.sin(t * 1.9)}deg)`;
+}
+const label = (el, t, a, b, x, y) => { const p = presence(t, a, .3, b, .15, E.back); el.style.opacity = t >= a && t < b + .15 ? 1 : 0;
+  el.style.left = x + 'px'; el.style.top = y + 'px'; el.style.transform = `translate(-50%,-50%) scale(${lerp(.4, 1, p)})`; };
+
+function seek(t) {
+  const looping = t >= LOOP;
+  /* HOOK */
+  show('#sHook', t < 2.4 || looping, looping ? 50 : 1);
+  drift($('#d1'), looping ? t - DURATION : t);
+  if (looping) { wipeUp($('#sHook'), t, LOOP, .4); hookPose(0); }
+  else { $('#sHook').style.clipPath = 'none'; $('#sHook').style.transform = `translateX(${shake(t, 1.0, .25, 10)}px)`; hookPose(t);
+    if (t >= 2.2) { const o = E.in(prog(t, 2.2, 2.4));
+      ['#hPov', '#hA', '#hB', '#hC', '#hD'].forEach((s, i) => { $(s).style.opacity = 1 - o; $(s).style.transform += ` translateY(${-o * (600 + i * 50)}px)`; });
+      $('#hEd').style.transform += ` translateY(${-o * 900}px) scale(${1 + o * .5})`; } }
+
+  /* FEATURES */
+  show('#sFeat', t >= 2.4 && t < 10.2, 2);
+  let cur = FEATS.findIndex(f => t >= f.S && t < f.E); if (cur < 0) cur = t < 2.4 ? 0 : 2;
+  FEATS.forEach((f, i) => {
+    const bg = $('#fb' + i); bg.style.opacity = i <= cur ? 1 : 0; bg.style.zIndex = i; wipeDiagonal(bg, t, f.S, .3);
+    $('#bars').children[i].firstChild.style.width = (100 * prog(t, f.S, f.E)) + '%';
+    const el = $('#ft' + i), on = i === cur, r = t - f.S; el.style.opacity = on ? 1 : 0;
+    if (on) { slam(el.querySelector('.num'), t, f.S + .05, 1.8); pose(el.querySelector('.t'), { o: E.out(prog(r, .1, .35)), x: lerp(-80, 0, E.out5(prog(r, .1, .4))) }); rise(el.querySelector('.s'), t, f.S + .3, .3); }
+    const p = $('#p' + i), sw = 1 - E.out5(prog(r, 0, .45)); p.style.opacity = on ? 1 : 0;
+    p.style.transform = `perspective(2600px) rotateY(${sw * (i % 2 ? 30 : -30)}deg) translateY(${sw * 140}px)`;
+  });
+  // 1 — code types in line by line
+  const r0 = t - FEATS[0].S;
+  $('#code').innerHTML = CODE.filter(c => r0 >= c[1]).map(c => c[0]).join('\n') + (Math.floor(t * 3) % 2 ? '<span class="caret"></span>' : '');
+  $('#ed1').style.transform = `scale(${1 + .06 * E.inOut(prog(r0, 1.2, 1.7))})`;
+  label($('#l0'), r0, 1.1, 2.45, 540, 780);
+  // 2 — frames fly by, counter climbs to 2340
+  const r1 = t - FEATS[1].S, pr = E.inOut(prog(r1, .4, 2.2));
+  $('#film').style.transform = `translateX(${90 - pr * 1700}px)`;
+  $('#prog i').style.width = (100 * pr) + '%';
+  $('#cn').textContent = 'frame ' + Math.round(2340 * pr);
+  const rs = E.back(prog(r1, 2.1, 2.4)); pose($('#res'), { o: r1 >= 2.1 ? 1 : 0, s: lerp(.4, 1, rs) });
+  // 3 — the waveform dances, sound chips pop
+  const r2 = t - FEATS[2].S;
+  [...$('#wave').children].forEach((b, i) => { const h = 40 + 330 * Math.abs(Math.sin(t * 5.3 + i * .55) * Math.sin(t * 2.1 + i * .23)) * (0.35 + 0.65 * E.out(prog(r2, 0, .6)));
+    b.style.height = h + 'px'; b.style.opacity = .55 + .45 * Math.abs(Math.sin(i * .9 + t * 3)); });
+  [.55, .8, 1.05, 1.3].forEach((a, k) => { const q = E.back(prog(r2, a, a + .35)); pose($('#m' + k), { o: r2 >= a ? 1 : 0, s: lerp(.3, 1, q), r: (k % 2 ? 3 : -3) }); });
+  label($('#l2'), r2, 1.55, 2.45, 540, 1040);
+
+  /* CTA */
+  show('#sCTA', t >= 10.2, 30);
+  wipeUp($('#sCTA'), t, 10.2, .24); drift($('#d2'), t);
+  $('#sCTA').style.transform = `translateX(${shake(t, 10.25) + shake(t, 10.6, .25, 9)}px)`;
+  slam($('#cA'), t, 10.25, 2.2); slam($('#cB'), t, 10.45, 2.2);
+  const mk = E.back(prog(t, 10.65, 11.0)); pose($('#cMark'), { o: t >= 10.65 ? 1 : 0, s: lerp(.3, 1, mk) * pulse(t, 11.4, .06) });
+  const pp = E.back(prog(t, 11.0, 11.35)); pose($('#cPill'), { s: lerp(.3, 1, pp), o: t < 11.0 ? 0 : 1 });
+  rise($('#cFollow'), t, 11.3, .3); rise($('#cStar'), t, 11.55, .3);
+}
+seek(0);
+</script></body></html>

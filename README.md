@@ -110,6 +110,12 @@ All of these were made with this kit, and every one has sound and a 4K60 master.
 
 What we learned along the way, including the flops, is in [`docs/08-case-study-estuda.md`](docs/08-case-study-estuda.md).
 
+## Made something with framezero?
+
+Open a **[Show your video](https://github.com/matheusvibecoder-vibecodas/framezero/issues/new?template=showcase.yml)** issue. The best ones get featured here. New to the code? Try a [good first issue](https://github.com/matheusvibecoder-vibecodas/framezero/labels/good%20first%20issue) or read [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Want to see a video *about* framezero? It's in [`examples/framezero-promo`](examples/framezero-promo/), and the MP4 is attached to the [v0.1.0 release](https://github.com/matheusvibecoder-vibecodas/framezero/releases/tag/v0.1.0).
+
 ## Repo map
 
 ```
