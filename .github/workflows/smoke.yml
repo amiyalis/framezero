@@ -1,0 +1,31 @@
+# Copyright 2026 Matheus Patricio Pessoa Santana — framezero (MIT)
+# Smoke test: the starter template and the example must render stills without page errors, and the soundtracks must build.
+name: smoke
+on:
+  push:
+  pull_request:
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -r requirements.txt
+      - run: python3 -m playwright install --with-deps chromium
+      - name: Stills (starter + example)
+        run: |
+          python3 kit/render.py templates/starter.html out/starter --stills 0,3.5,6.6,10.9 2> err.txt; cat err.txt
+          python3 kit/render.py examples/estuda-tour/tour.html out/tour --stills 0,12.5,30 2>> err.txt; cat err.txt
+          ! grep -q "PAGE ERROR" err.txt
+      - name: Soundtracks
+        run: |
+          python3 templates/soundtrack.py out/starter.wav
+          python3 examples/estuda-tour/soundtrack.py out/tour.wav
+      - name: Short video encode (first 3 s of the starter at 1080p30)
+        run: |
+          sed 's/const DURATION = 12.6/const DURATION = 3/' templates/starter.html > templates/_ci.html
+          python3 kit/render.py templates/_ci.html out/ci.mp4 --audio out/starter.wav
+          ls -la out
+      - uses: actions/upload-artifact@v4
+        with: { name: stills, path: out/*.png }

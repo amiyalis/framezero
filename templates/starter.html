@@ -1,0 +1,250 @@
+<!doctype html>
+<!-- Copyright 2026 Matheus Patricio Pessoa Santana — framezero (MIT)
+     STARTER TEMPLATE — a complete 12.6 s vertical promo for a fictional habit app ("yourapp").
+     Structure:  HOOK (0–2.4, readable on frame 0)  →  3 FEATURES with a phone + camera + labels (2.4–10.2)
+                 →  CTA (10.2–12.6)  →  seamless loop back to the hook (12.2–12.6).
+     Edit the CONFIG block, the app UI in appUI(), and keep soundtrack.py timings in sync. -->
+<html lang="en"><head><meta charset="utf-8">
+<!--BASE-->
+<style>
+  html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#07041A;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+  .scene{position:absolute;inset:0;opacity:0;overflow:hidden}
+  .abs{position:absolute;will-change:transform,opacity}
+  svg.ic{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .big{left:0;right:0;text-align:center;font-weight:900;letter-spacing:-.055em;line-height:.9;text-transform:uppercase;white-space:nowrap}
+  .bg-dark{background:radial-gradient(120% 70% at 50% 32%,#3A23B8 0%,#1A0F5C 45%,#07041A 100%)}
+  .bg-violet{background:radial-gradient(90% 60% at 50% 38%,#9C85FF 0%,#6A4BFF 50%,#3A1FC2 100%)}
+  .bg-green{background:radial-gradient(90% 60% at 50% 38%,#1BE39C 0%,#00A66E 55%,#00663F 100%)}
+  .bg-coral{background:radial-gradient(90% 60% at 50% 38%,#FF8A66 0%,#F0442E 50%,#B01E1E 100%)}
+  .dots{position:absolute;inset:-200px;background-image:radial-gradient(rgba(255,255,255,.08) 2px,transparent 2.5px);background-size:46px 46px}
+
+  /* ---------- phone + app UI (UI is drawn at real size 390x844 and scaled) ---------- */
+  .phone{position:absolute;width:640px;height:1385px;border-radius:100px;background:#0A0B10;padding:16px;box-shadow:0 80px 130px -50px rgba(0,0,0,.65),inset 0 0 0 3px #2A2D36}
+  .screen{position:relative;width:100%;height:100%;border-radius:84px;overflow:hidden;background:#F5F4FF}
+  .island{position:absolute;left:50%;top:11px;width:110px;height:32px;margin-left:-55px;border-radius:16px;background:#000;z-index:9}
+  .ui{position:absolute;left:0;top:0;width:390px;height:844px;transform-origin:0 0;font-size:15px;color:#17142B}
+  .ui .time{position:absolute;left:30px;top:16px;font-weight:700;font-size:15px}
+  .ui .hi{position:absolute;left:22px;top:64px;font-size:13px;font-weight:700;color:#6E6A8C;letter-spacing:.06em;text-transform:uppercase}
+  .ui .name{position:absolute;left:22px;top:84px;font-size:28px;font-weight:900;letter-spacing:-.03em}
+  .ui .av{position:absolute;right:22px;top:70px;width:46px;height:46px;border-radius:15px;background:linear-gradient(160deg,#8E73FF,#4529D6);color:#fff;display:grid;place-items:center;font-weight:900;font-size:18px}
+  .ui .card{position:absolute;border-radius:20px;background:#fff;box-shadow:0 0 0 1px #E4E1F5,0 8px 20px -12px rgba(40,20,120,.25)}
+  .ui .streak{left:16px;top:138px;width:174px;height:120px}
+  .ui .ring{left:200px;top:138px;width:174px;height:120px}
+  .ui .flame{position:absolute;left:16px;top:16px;width:40px;height:40px;border-radius:12px;background:linear-gradient(160deg,#FF8A66,#E5341F);color:#fff;display:grid;place-items:center;font-size:22px}
+  .ui .knum{position:absolute;left:16px;top:62px;font-size:30px;font-weight:900;letter-spacing:-.03em;height:36px;overflow:hidden}
+  .ui .knum span{display:block}
+  .ui .klbl{position:absolute;left:16px;top:96px;font-size:12px;font-weight:700;color:#6E6A8C}
+  .ui .rsvg{position:absolute;left:14px;top:16px;width:58px;height:58px}
+  .ui .rtxt{position:absolute;left:84px;top:22px;font-size:26px;font-weight:900;letter-spacing:-.03em}
+  .ui .rsub{position:absolute;left:84px;top:54px;font-size:12px;font-weight:700;color:#6E6A8C}
+  .ui .rbar{position:absolute;left:16px;right:16px;top:92px;height:8px;border-radius:4px;background:#ECE9FA;overflow:hidden}
+  .ui .rbar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:#4C3BFF}
+  .ui .sec{position:absolute;left:22px;top:282px;font-size:12px;font-weight:800;letter-spacing:.14em;color:#6E6A8C}
+  .ui .ai{position:absolute;right:22px;top:276px;padding:5px 10px;border-radius:12px;background:#EDEAFF;color:#4C3BFF;font-size:12px;font-weight:800;display:flex;gap:5px;align-items:center}
+  .ui .task{left:16px;width:358px;height:74px}
+  .ui .task .cb{position:absolute;left:16px;top:24px;width:26px;height:26px;border-radius:8px;box-shadow:inset 0 0 0 2.5px #C9C4EA;display:grid;place-items:center;color:#fff;font-size:17px}
+  .ui .task .cb.on{background:#4C3BFF;box-shadow:none}
+  .ui .task .cb svg{stroke-width:3.2}
+  .ui .task .tt{position:absolute;left:56px;top:17px;font-size:16px;font-weight:800;letter-spacing:-.01em}
+  .ui .task .ts{position:absolute;left:56px;top:40px;font-size:12.5px;font-weight:600;color:#6E6A8C}
+  .ui .task .xp{position:absolute;right:16px;top:25px;padding:4px 9px;border-radius:10px;background:#FFF4D1;color:#8A5A00;font-size:12px;font-weight:900}
+  .ui .task .strike{position:absolute;left:-2px;right:-2px;top:10px;height:2.5px;background:#17142B;transform-origin:0 50%;transform:scaleX(0)}
+  .ui .nav{position:absolute;left:0;right:0;bottom:0;height:84px;background:#fff;box-shadow:0 -1px 0 #E4E1F5;display:flex;justify-content:space-around;padding-top:14px;color:#A39FC2;font-size:24px}
+  .ui .nav .on{color:#4C3BFF}
+
+  /* ---------- HOOK ---------- */
+  #hPov{top:300px;font-size:120px;color:#FFC233}
+  #hA{top:430px;font-size:76px;color:#fff;letter-spacing:-.04em}
+  #hB{top:525px;font-size:250px;color:#fff}
+  #hC{top:745px;font-size:190px;color:#FFC233}
+  #hD{left:0;right:0;top:965px;display:flex;justify-content:center}
+  #hD span{padding:20px 44px;border-radius:60px;background:#FF5A47;color:#fff;font-size:56px;font-weight:900;letter-spacing:-.03em;text-transform:uppercase}
+  #hPhone{left:250px;top:1215px;width:580px;height:1255px;border-radius:92px;padding:15px;transform-origin:50% 30%}
+  #hPhone .screen{border-radius:78px}
+  .persp{position:absolute;inset:0;perspective:1800px}
+  .badge{position:absolute;left:0;top:0;display:flex;align-items:center;gap:14px;padding:18px 28px;border-radius:40px;background:#fff;color:#17142B;font-size:42px;font-weight:900;letter-spacing:-.03em;white-space:nowrap;box-shadow:0 24px 50px -18px rgba(0,0,0,.55);opacity:0;z-index:5}
+  .badge i{display:grid;place-items:center;width:58px;height:58px;border-radius:18px;color:#fff;font-size:34px;font-style:normal}
+  .badge svg.ic{stroke-width:2.5}
+
+  /* ---------- FEATURES ---------- */
+  .fbg{position:absolute;inset:0;opacity:0}
+  #bars{position:absolute;left:80px;right:80px;top:210px;display:flex;gap:12px;z-index:6}
+  #bars b{flex:1;height:9px;border-radius:5px;background:rgba(255,255,255,.3);overflow:hidden;position:relative}
+  #bars b i{position:absolute;left:0;top:0;bottom:0;width:0;background:#fff}
+  .ftitle{left:80px;top:250px;z-index:6;opacity:0}
+  .ftitle .num{display:inline-flex;align-items:baseline;padding:6px 18px;border-radius:18px;background:#FFC233;color:#17142B;font-size:58px;font-weight:900}
+  .ftitle .num small{font-size:30px;opacity:.6}
+  .ftitle .t{margin-top:14px;font-size:118px;font-weight:900;letter-spacing:-.05em;line-height:.92;color:#fff;text-transform:uppercase;white-space:nowrap}
+  .ftitle .s{margin-top:12px;font-size:42px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:-.02em}
+  #win{position:absolute;left:0;right:0;top:530px;bottom:0;z-index:5;overflow:hidden;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 46px)}
+  #cam{position:absolute;left:220px;top:30px;width:640px;height:1385px;transform-origin:0 0}
+  .tap{position:absolute;width:70px;height:70px;margin:-35px 0 0 -35px;border-radius:50%;border:4px solid #FF5A47;background:rgba(255,90,71,.18);z-index:8;opacity:0}
+  .xpPop{position:absolute;padding:7px 12px;border-radius:14px;background:linear-gradient(180deg,#FFD84D,#FFB020);color:#2A1C00;font-size:16px;font-weight:900;white-space:nowrap;opacity:0;z-index:8}
+  .lab{position:absolute;left:0;top:0;z-index:7;opacity:0}
+  .lab .rg{position:absolute;left:-46px;top:-46px;width:92px;height:92px;border-radius:50%;border:7px solid #FFC233;box-shadow:0 0 0 6px rgba(0,0,0,.18)}
+  .lab .pl{position:absolute;white-space:nowrap;padding:16px 26px;border-radius:26px;background:#17142B;color:#fff;font-size:44px;font-weight:700;letter-spacing:-.02em;transform:translate(-50%,-50%);box-shadow:0 20px 40px -16px rgba(0,0,0,.5)}
+  .lab .pl b{color:#FFC233}
+
+  /* ---------- CTA ---------- */
+  #c100{top:420px;font-size:170px;color:#fff}
+  #cFree{top:580px;font-size:330px;color:#FFC233}
+  #cPill{left:0;right:0;top:960px;display:flex;justify-content:center}
+  #cPill span{display:inline-flex;gap:18px;align-items:center;padding:26px 50px;border-radius:70px;background:#fff;color:#17142B;font-size:64px;font-weight:900;letter-spacing:-.03em;text-transform:uppercase;box-shadow:0 30px 60px -24px rgba(0,0,0,.6)}
+  #cFollow{left:0;right:0;top:1140px;text-align:center;font-size:48px;font-weight:700;color:rgba(255,255,255,.92);letter-spacing:-.02em}
+  #cMark{left:0;right:0;top:1300px;text-align:center;font-size:96px;font-weight:900;letter-spacing:-.05em;color:#fff}
+  #cMark b{color:#FFC233}
+</style></head><body>
+<!--ICONS-->
+
+<!-- HOOK: the best frame is frame 0 — all text is already on screen at t=0 -->
+<div class="scene bg-dark" id="sHook"><div class="dots" id="d1"></div>
+  <div class="abs big" id="hPov">POV:</div>
+  <div class="abs big fit" id="hA">you found an app that</div>
+  <div class="abs big fit" id="hB">plans</div>
+  <div class="abs big fit" id="hC">your day</div>
+  <div class="abs" id="hD"><span>and it's free</span></div>
+  <div class="persp"><div class="abs phone" id="hPhone"><div class="screen"><div class="island"></div><div class="ui" style="transform:scale(1.41)"></div></div></div></div>
+  <div class="badge" id="b0"><i style="background:linear-gradient(160deg,#FFD84D,#FF8A00)"><svg class="ic"><use href="#i-star"/></svg></i>+20 XP</div>
+  <div class="badge" id="b1"><i style="background:linear-gradient(160deg,#FF7A52,#D92B2B)"><svg class="ic"><use href="#i-flame"/></svg></i>7 days</div>
+  <div class="badge" id="b2"><i style="background:linear-gradient(160deg,#8E73FF,#4529D6)"><svg class="ic"><use href="#i-spark"/></svg></i>smart plan</div>
+</div>
+
+<!-- FEATURES: one shared phone, the camera moves between details -->
+<div class="scene" id="sFeat">
+  <div class="fbg bg-violet" id="fb0"><div class="dots"></div></div>
+  <div class="fbg bg-green" id="fb1"><div class="dots"></div></div>
+  <div class="fbg bg-coral" id="fb2"><div class="dots"></div></div>
+  <div id="bars"><b><i></i></b><b><i></i></b><b><i></i></b></div>
+  <div id="titles"></div>
+  <div id="win"><div id="cam"><div class="abs phone" id="fPhone"><div class="screen"><div class="island"></div><div class="ui" style="transform:scale(1.559)"></div></div></div>
+    <div class="tap" id="tap"></div></div></div>
+  <div class="lab" id="lab"><div class="rg"></div><div class="pl"></div></div>
+</div>
+
+<!-- CTA -->
+<div class="scene bg-dark" id="sCTA"><div class="dots" id="d2"></div>
+  <div class="abs big" id="c100">100%</div>
+  <div class="abs big" id="cFree">free</div>
+  <div class="abs" id="cPill"><span><svg class="ic"><use href="#i-rocket"/></svg>coming soon</span></div>
+  <div class="abs" id="cFollow">follow to know when it launches</div>
+  <div class="abs" id="cMark">your<b>app</b></div>
+</div>
+
+<script>
+/* =================== CONFIG — edit here =================== */
+const DURATION = 12.6, LOOP = 12.2;           // LOOP: when the hook starts wiping back in (seamless loop)
+const C = makeCamera({ k: 1.559, x: 220, y: 560 });   // UI scale inside the phone + phone position on the video
+const TASKS = [['Read 10 pages', 'Focus · 12 min', '+20'], ['Workout', 'Health · 20 min', '+30'], ['Learn 15 words', 'Language · 8 min', '+15'], ['Plan tomorrow', 'Life · 5 min', '+10']];
+const FEATS = [
+  { S: 2.4, E: 5.0, title: 'Smart plan', sub: 'your day, organized in seconds',
+    cam: [[0, C.FULL], [0.45, C.FULL], [0.95, C.at(195, 400, 1.45, 540, 1000)], [2.6, C.at(195, 400, 1.45, 540, 1000)]],
+    label: [1.05, 2.45, 345, 283, 'planned by <b>AI</b>', -200, -115] },
+  { S: 5.0, E: 7.6, title: 'One tap done', sub: 'check it off, earn XP',
+    cam: [[0, C.FULL], [0.4, C.FULL], [0.85, C.at(195, 360, 1.55, 540, 1000)], [2.6, C.at(195, 360, 1.55, 540, 1000)]],
+    label: [1.55, 2.45, 345, 347, 'earn <b>XP</b>', -170, 150] },
+  { S: 7.6, E: 10.2, title: 'Streaks', sub: "don't break the chain",
+    cam: [[0, C.FULL], [0.4, C.FULL], [0.85, C.at(103, 198, 1.9, 540, 1000)], [2.6, C.at(103, 198, 1.9, 540, 1000)]],
+    label: [1.5, 2.45, 103, 198, 'every day <b>counts</b>', 0, 230] },
+];
+/* ========================================================= */
+
+/* ---------- setup (runs once) ---------- */
+function appUI() {
+  return `<div class="time">9:41</div><div class="hi">Good morning</div><div class="name">Alex</div><div class="av">A</div>
+  <div class="card streak"><div class="flame"><svg class="ic"><use href="#i-flame"/></svg></div>
+    <div class="knum"><span class="kroll"><span>6 days</span><span>7 days</span></span></div><div class="klbl">streak</div></div>
+  <div class="card ring"><svg class="rsvg" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#ECE9FA" stroke-width="7"/>
+    <circle class="rarc" cx="29" cy="29" r="24" fill="none" stroke="#4C3BFF" stroke-width="7" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="90" transform="rotate(-90 29 29)"/></svg>
+    <div class="rtxt"><span class="rn">2</span>/5</div><div class="rsub">done today</div><div class="rbar"><i style="width:40%"></i></div></div>
+  <div class="sec">TODAY'S PLAN</div><div class="ai"><svg class="ic"><use href="#i-spark"/></svg>AI</div>
+  ${TASKS.map((k, i) => `<div class="card task" style="top:${310 + i * 86}px"><div class="cb"><svg class="ic" style="opacity:0"><use href="#i-check"/></svg></div>
+    <div class="tt">${k[0]}<i class="strike"></i></div><div class="ts">${k[1]}</div><div class="xp">${k[2]} XP</div></div>`).join('')}
+  <div class="nav"><svg class="ic on"><use href="#i-calendar"/></svg><svg class="ic"><use href="#i-chart"/></svg><svg class="ic"><use href="#i-trophy"/></svg><svg class="ic"><use href="#i-users"/></svg></div>`;
+}
+$$('.ui').forEach(u => u.innerHTML = appUI());
+$('#fPhone .ui').insertAdjacentHTML('beforeend', '<div class="xpPop" id="xpPop" style="left:296px;top:300px">+20 XP</div>');
+$$('.fit').forEach(el => { const w = el.scrollWidth; if (w > 920) el.style.fontSize = (parseFloat(getComputedStyle(el).fontSize) * 920 / w) + 'px'; });
+$('#titles').innerHTML = FEATS.map((f, i) => `<div class="abs ftitle" id="ft${i}"><div class="num">${i + 1}<small>/3</small></div><div class="t">${f.title}</div><div class="s">${f.sub}</div></div>`).join('');
+const fu = $('#fPhone .ui'), strike = fu.querySelector('.task .strike');
+
+/* ---------- hook: phone bounces on the beat, badges pop out ---------- */
+function hookPose(t) {
+  const bump = (a, d = .3) => Math.sin(prog(t, a, a + d) * Math.PI);
+  pose($('#hPov'), { s: pulse(t, 0.5, .12), r: -3 }); pose($('#hA'), {});
+  pose($('#hB'), { s: pulse(t, 1.0, .1) });
+  pose($('#hC'), { s: pulse(t, 1.0, .16, .32), r: -2 });
+  pose($('#hD'), { s: pulse(t, 1.5, .12) });
+  const lift = 45 * E.inOut(prog(t, 0, 2.0)), hop = 40 * bump(.5) + 60 * bump(1.0, .34) + 40 * bump(1.5);
+  $('#hPhone').style.transform = `translateY(${-hop - lift}px) rotateY(${-13 * Math.sin(t * 2.6)}deg) rotateZ(${-7 + 4 * Math.sin(t * 1.9)}deg)`;
+  [[.5, 80, 1250, -8], [.75, 700, 1230, 7], [1.0, 330, 1450, -3]].forEach(([a, x, y, r], k) => {
+    const p = E.back(prog(t, a, a + .4)), q = E.out5(prog(t, a, a + .4));
+    pose($('#b' + k), { x: lerp(440, x, q), y: lerp(1450 - lift, y, q) + Math.sin((t - a) * 3 + k) * 8, s: lerp(.2, 1, p), r: lerp(0, r, q), o: t < a ? 0 : Math.min(1, prog(t, a, a + .08)) });
+  });
+}
+
+function seek(t) {
+  const looping = t >= LOOP;
+  /* ---------- HOOK 0 → 2.4 ---------- */
+  show('#sHook', t < 2.4 || looping, looping ? 50 : 1);
+  drift($('#d1'), looping ? t - DURATION : t);
+  if (looping) { wipeUp($('#sHook'), t, LOOP, .4); hookPose(0); }
+  else {
+    $('#sHook').style.clipPath = 'none';
+    $('#sHook').style.transform = `translateX(${shake(t, 1.0, .25, 10)}px)`;
+    hookPose(t);
+    if (t >= 2.2) { const out = E.in(prog(t, 2.2, 2.4));
+      ['#hPov', '#hA', '#hB', '#hC', '#hD'].forEach((s, i) => { $(s).style.opacity = 1 - out; $(s).style.transform += ` translateY(${-out * (600 + i * 50)}px)`; });
+      $('#hPhone').style.transform += ` translateY(${-out * 900}px) scale(${1 + out * .7})`;
+      for (let k = 0; k < 3; k++) $('#b' + k).style.opacity = 1 - out; }
+  }
+
+  /* ---------- FEATURES 2.4 → 10.2 ---------- */
+  show('#sFeat', t >= 2.4 && t < 10.2, 2);
+  let cur = FEATS.findIndex(f => t >= f.S && t < f.E); if (cur < 0) cur = t < 2.4 ? 0 : 2;
+  FEATS.forEach((f, i) => {
+    const bg = $('#fb' + i); bg.style.opacity = i <= cur ? 1 : 0; wipeDiagonal(bg, t, f.S, .3); bg.style.zIndex = i;
+    $('#bars').children[i].firstChild.style.width = (100 * prog(t, f.S, f.E)) + '%';
+    const el = $('#ft' + i), on = i === cur, r = t - f.S;
+    el.style.opacity = on ? 1 : 0;
+    if (on) { slam(el.querySelector('.num'), t, f.S + .05, 1.8);
+      const tt = el.querySelector('.t'); pose(tt, { o: E.out(prog(r, .1, .35)), x: lerp(-80, 0, E.out5(prog(r, .1, .4))) });
+      rise(el.querySelector('.s'), t, f.S + .3, .3); }
+  });
+  const F0 = FEATS[cur], r = t - F0.S, shot = C.track(F0.cam, r);
+  const spin = 1 - E.out5(prog(r, 0, .45));                     // the phone swings in at each new feature
+  C.apply($('#cam'), shot);
+  $('#fPhone').style.transform = `perspective(2600px) rotateY(${spin * (cur % 2 ? 35 : -35)}deg) translateY(${spin * 120}px)`;
+  // label: gold ring on the detail + dark pill, enters with a pop
+  const [la, lb, ux, uy, txt, dx, dy] = F0.label, lp = presence(r, la, .3, lb, .15, E.back);
+  const [X, Y] = C.onScreen(shot, ux, uy), lab = $('#lab');
+  lab.style.opacity = r >= la && r < lb + .15 ? 1 : 0;
+  lab.style.transform = `translate(${X}px,${Y}px)`;
+  lab.querySelector('.rg').style.transform = `scale(${lerp(.3, 1, lp)})`;
+  const pl = lab.querySelector('.pl'); pl.innerHTML = txt; pl.style.left = dx + 'px'; pl.style.top = dy + 'px';
+  pl.style.transform = `translate(-50%,-50%) scale(${lerp(.4, 1, lp)})`;
+  // feature 2 — a tap checks the first task, XP pops, progress goes 2/5 → 3/5
+  const T2 = FEATS[1].S, done = t >= T2 + 1.25, tp = prog(t, T2 + 1.05, T2 + 1.5);
+  const tap = $('#tap'); tap.style.left = (16 + 45 * 1.559) + 'px'; tap.style.top = (16 + 347 * 1.559) + 'px';
+  tap.style.opacity = tp > 0 && tp < 1 ? 1 - tp : 0; tap.style.transform = `scale(${lerp(.6, 1.6, E.out(tp))})`;
+  const cb = fu.querySelector('.task .cb'); cb.classList.toggle('on', done); cb.firstElementChild.style.opacity = done ? 1 : 0;
+  cb.style.transform = `scale(${pulse(t, T2 + 1.25, .3, .25)})`;
+  strike.style.transform = `scaleX(${E.out(prog(t, T2 + 1.3, T2 + 1.6))})`;
+  const xq = prog(t, T2 + 1.35, T2 + 2.2); pose($('#xpPop'), { o: xq > 0 && xq < 1 ? Math.min(1, xq * 6) * (1 - E.in(prog(xq, .7, 1))) : 0, y: -40 * E.out(xq), s: lerp(.5, 1, E.back(prog(xq, 0, .3))) });
+  fu.querySelector('.rn').textContent = done ? 3 : 2;
+  fu.querySelector('.rarc').setAttribute('stroke-dashoffset', 90 - 30 * E.out(prog(t, T2 + 1.3, T2 + 1.7)));
+  fu.querySelector('.rbar i').style.width = (40 + 20 * E.out(prog(t, T2 + 1.3, T2 + 1.7))) + '%';
+  // feature 3 — the streak rolls from 6 to 7 days
+  const T3 = FEATS[2].S;
+  fu.querySelector('.kroll').style.transform = `translateY(${-36 * E.back(prog(t, T3 + 1.2, T3 + 1.55))}px)`;
+  fu.querySelector('.streak').style.transform = `scale(${pulse(t, T3 + 1.2, .08, .35)})`;
+
+  /* ---------- CTA 10.2 → 12.6 ---------- */
+  show('#sCTA', t >= 10.2, 30);
+  wipeUp($('#sCTA'), t, 10.2, .24); drift($('#d2'), t);
+  $('#sCTA').style.transform = `translateX(${shake(t, 10.25) + shake(t, 10.6, .25, 9)}px)`;
+  slam($('#c100'), t, 10.25, 2.2); slam($('#cFree'), t, 10.6, 2.2);
+  const pp = E.back(prog(t, 11.0, 11.35)); pose($('#cPill'), { s: lerp(.3, 1, pp) * (t > 11.4 ? 1 + .035 * Math.sin((t - 11.4) * Math.PI * 4) : 1), o: t < 11.0 ? 0 : 1 });
+  rise($('#cFollow'), t, 11.35, .3); rise($('#cMark'), t, 11.6, .3);
+}
+seek(0);
+</script></body></html>

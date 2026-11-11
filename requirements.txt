@@ -1,0 +1,5 @@
+playwright>=1.40
+imageio-ffmpeg>=0.4.9
+numpy>=1.24
+scipy>=1.10
+pillow>=10.0

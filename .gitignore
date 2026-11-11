@@ -1,0 +1,8 @@
+out/
+*.mp4
+*.wav
+.framezero-*.html
+__pycache__/
+frames*/
+!media/*.gif
+templates/_ci.html

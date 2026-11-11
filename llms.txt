@@ -1,0 +1,30 @@
+# framezero
+
+> Make vertical (9:16) app promo videos for TikTok/Reels/Shorts from deterministic HTML scenes. Playwright screenshots each frame, ffmpeg encodes 1080p or 4K60, and numpy synthesizes copyright-free lo-fi music and sound effects synced to the same timeline. Plain HTML/JS/Python with no bundler, React or GPU. Built for humans and AI coding agents.
+
+## Start here
+- [AGENTS.md](AGENTS.md): step-by-step operating manual for AI agents (inputs, script table, hard rules, QA loop, sound map, render commands, pitfalls)
+- [README.md](README.md): overview, quickstart, showcase
+- [skills/framezero/SKILL.md](skills/framezero/SKILL.md): the same workflow as an Agent Skill
+
+## Engine
+- [kit/render.py](kit/render.py): HTML scene → MP4 or stills (`--stills`, `--scale 2`, `--fps 60`, `--audio`, `--frames-dir`)
+- [kit/assemble.sh](kit/assemble.sh): chunked 4K encode that fits in about 1 GB RAM
+- [kit/motion.js](kit/motion.js): deterministic animation helpers (prog, lerp, E easings, pose, slam, rise, pulse, shake, wipes, letters, makeCamera)
+- [kit/sound.py](kit/sound.py): synth + effects + mixing (lofi_keys, lofi_beat, vinyl, whoosh, impact, pop, click, ding, coin, riser, Mix)
+
+## Templates & examples
+- [templates/starter.html](templates/starter.html): complete 12.6 s English promo (hook → 3 features with phone camera → CTA → loop)
+- [templates/soundtrack.py](templates/soundtrack.py): its synced soundtrack
+- [examples/estuda-tour/](examples/estuda-tour/): a real 39 s app-tour video with screenshots (Portuguese on-screen text)
+
+## Docs
+- [docs/01-method.md](docs/01-method.md): why HTML + seek(t)
+- [docs/02-story-and-hooks.md](docs/02-story-and-hooks.md): structure, hook formulas, retention
+- [docs/03-animation.md](docs/03-animation.md): easing, helpers, timing
+- [docs/04-phone-and-camera.md](docs/04-phone-and-camera.md): screenshots in a phone, camera zooms, labels
+- [docs/05-sound.md](docs/05-sound.md): soundtrack design and sync
+- [docs/06-rendering.md](docs/06-rendering.md): 1080p, 4K60, low RAM, color
+- [docs/07-publishing.md](docs/07-publishing.md): captions, hashtags, posting
+- [docs/08-case-study-estuda.md](docs/08-case-study-estuda.md): five real videos and what we learned
+- [docs/09-qa-checklist.md](docs/09-qa-checklist.md): pre-flight checklist
