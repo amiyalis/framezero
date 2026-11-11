@@ -9,6 +9,14 @@
 
 Written for **humans** *and* for **AI coding agents** (Claude Code, Codex, Cursor, Copilot, Gemini CLI…).
 
+[![smoke](https://github.com/matheusvibecoder-vibecodas/framezero/actions/workflows/smoke.yml/badge.svg)](https://github.com/matheusvibecoder-vibecodas/framezero/actions/workflows/smoke.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-FFC233)](LICENSE)
+[![Agent Skill](https://img.shields.io/badge/Agent%20Skill-ready-6A4BFF)](skills/framezero/SKILL.md)
+[![AGENTS.md](https://img.shields.io/badge/AGENTS.md-included-13D18C)](AGENTS.md)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-FF7A52)](CONTRIBUTING.md)
+
+**[Website](https://matheusvibecoder-vibecodas.github.io/framezero/)** · **English** · [Português](LEIAME.md)
+
 <img src="media/estuda-tour-hook.gif" width="230" alt="estuda+ tour video — hook">&nbsp;&nbsp;<img src="media/starter.gif" width="230" alt="starter template">&nbsp;&nbsp;<img src="media/estuda-tour-challenge.gif" width="230" alt="estuda+ tour video — daily challenge">
 
 <sub>Left/right: real TikTok/Reels videos for <b>estuda+</b>, a free study app (on-screen text in Portuguese). Center: the English starter template in this repo.</sub>

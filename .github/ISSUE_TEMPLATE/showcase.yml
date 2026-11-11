@@ -1,0 +1,14 @@
+name: Show your video
+description: Made a video with framezero? Share it. The best ones go in the README.
+labels: [showcase]
+body:
+  - type: input
+    attributes: { label: Link to the video (TikTok / Reels / Shorts / YouTube / X) }
+    validations: { required: true }
+  - type: textarea
+    attributes: { label: What did you change or learn?, description: "Optional, but other people love this." }
+  - type: checkboxes
+    attributes:
+      label: Permission
+      options:
+        - label: You can feature a GIF or still of my video in the README showcase

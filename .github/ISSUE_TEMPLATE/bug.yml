@@ -1,0 +1,11 @@
+name: Bug report
+description: Something renders wrong or a command fails
+labels: [bug]
+body:
+  - type: textarea
+    attributes: { label: What happened?, description: "Command you ran, output (look for PAGE ERROR), and what you expected." }
+    validations: { required: true }
+  - type: input
+    attributes: { label: OS / Python / Playwright version }
+  - type: textarea
+    attributes: { label: Stills or contact sheet, description: "Drag images here if it's a visual bug." }

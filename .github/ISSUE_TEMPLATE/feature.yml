@@ -1,0 +1,7 @@
+name: Feature idea
+description: A helper, sound, template or format you'd like
+labels: [enhancement]
+body:
+  - type: textarea
+    attributes: { label: The idea, description: "What should it do? A link to a video that shows the effect helps a lot." }
+    validations: { required: true }
