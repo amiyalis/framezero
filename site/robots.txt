@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://matheusvibecoder-vibecodas.github.io/framezero/sitemap.xml
